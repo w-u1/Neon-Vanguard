@@ -1,0 +1,56 @@
+# ---------------------------------------------------------------
+# Unity 工程标准忽略规则
+# ---------------------------------------------------------------
+
+# Unity 自动生成的缓存与中间产物（本工程 Library 约 520MB，绝不能入库）
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Visual Studio / Rider / VS Code 的工程文件（由 Unity 自动重新生成）
+.vs/
+.idea/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# 构建产物
+*.apk
+*.aab
+*.unitypackage
+*.app
+ExportedObj/
+crashlytics-build.properties
+
+# 自检输出的截图（可随时由 -nvt-selftest 重新生成）
+SelfTestShots/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------
+# 说明：以下内容**需要**入库，不要忽略
+#   Assets/**            源码与资源（含 Resources/Models 的 CC0 美术）
+#   ProjectSettings/**   工程设置（输入轴、产品名、构建场景列表等）
+#   Packages/**          包依赖清单
+#   Docs/**              说明文档与授权文件
+# ---------------------------------------------------------------
