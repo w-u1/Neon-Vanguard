@@ -112,7 +112,8 @@ Assets/
 ├── Editor/
 │   └── Builder.cs                 一键 / 命令行构建；自动补齐场景、Build Settings、TMP 资源
 ├── Resources/
-│   ├── Fonts/SimHei.ttf           中文字体（代码中有三级回退链）
+│   ├── Fonts/NotoSansSC-VF.ttf    中文字体（SIL OFL 1.1，允许再分发）
+│   ├── Fonts/OFL.txt              字体许可全文
 │   └── Models/*.obj,.mtl          Kenney Space Kit 模型（CC0，见 Docs/ART_CREDITS.md）
 ├── Scripts/
 │   ├── Core/
@@ -262,9 +263,20 @@ Assets/
 
 ## 8. 资源与授权
 
-- 美术：**Kenney Space Kit 2.0（CC0 公共领域）**，详见 [`Docs/ART_CREDITS.md`](Docs/ART_CREDITS.md)
-- 音频：无外部资源，全部运行时合成
-- 字体：`SimHei.ttf` 仅用于本地演示；对外分发请替换为 SIL OFL 授权的开源中文字体
+| 内容 | 授权 | 说明 |
+| --- | --- | --- |
+| 代码（`Assets/Scripts`、`Assets/Editor`） | **MIT** | 见 [`LICENSE`](LICENSE) |
+| 美术（`Assets/Resources/Models`） | **CC0 1.0** | Kenney Space Kit 2.0，见 [`Docs/ART_CREDITS.md`](Docs/ART_CREDITS.md) |
+| 字体（`Assets/Resources/Fonts`） | **SIL OFL 1.1** | Noto Sans SC，见 [`Assets/Resources/Fonts/OFL.txt`](Assets/Resources/Fonts/OFL.txt) |
+| 音频 | 无外部资源 | 音效与背景垫乐全部由代码在运行时合成 |
+
+几点说明：
+
+- 字体选 Noto Sans SC 而非系统黑体，是因为 OFL **明确允许随软件打包再分发**，
+  而 Windows 自带字体不允许随工程分发。
+- 代码里保留了三级字体回退（工程字体 → 系统字体 → Unity 内建字体），
+  即使删掉字体文件，游戏依然能跑（只是中文可能退化）。
+- 美术资源同样是可插拔的：`ModelLibrary` 取不到模型时会自动回落到程序化几何体。
 
 ---
 

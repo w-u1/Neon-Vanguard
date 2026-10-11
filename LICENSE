@@ -1,0 +1,48 @@
+MIT License
+
+Copyright (c) 2026 武学锋 (w-u1)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+--------------------------------------------------------------------------------
+第三方资源说明 / Third-party assets
+
+本工程的第三方资源与代码使用不同的授权，各自适用其原始协议：
+
+1. 美术资源 —— Kenney Space Kit 2.0
+   Assets/Resources/Models/ 下的全部 .obj / .mtl 文件
+   授权：CC0 1.0 Universal (公共领域)
+   来源：https://kenney.nl/assets/space-kit
+   详见：Docs/ART_CREDITS.md 与 Docs/kenney_space-kit_License.txt
+
+2. 字体 —— Noto Sans SC
+   Assets/Resources/Fonts/NotoSansSC-VF.ttf
+   授权：SIL Open Font License 1.1
+   版权：Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved
+         Font Name 'Source'. Noto is a trademark of Google Inc.
+   来源：https://fonts.google.com/noto/specimen/Noto+Sans+SC
+   许可全文见同目录 OFL.txt
+
+3. Unity TextMeshPro 的 Essential Resources（Assets/TextMesh Pro/）
+   由 com.unity.textmeshpro 包导入，适用 Unity Companion License。
+
+4. 代码、场景与音效
+   Assets/Scripts/、Assets/Editor/ 下的全部 C# 源码，以及运行时合成的音频，
+   均以本文件顶部的 MIT 协议授权。
+   工程内不含任何音频素材文件 —— 音效与背景垫乐全部由代码在运行时合成。

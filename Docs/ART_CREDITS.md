@@ -54,7 +54,31 @@ Space Kit 中的走廊、单轨、火箭分段等模块化建筑件未使用 —
 
 ## 字体
 
-`Assets/Resources/Fonts/SimHei.ttf` 为系统中文字体（黑体），
-仅用于本地开发与演示环境的中文显示。若需对外分发，请替换为可再分发的开源中文字体
-（如思源黑体 Source Han Sans、Noto Sans SC，均为 SIL OFL 授权）。
-代码中已实现回退链：工程字体 → 系统字体 → Unity 内建字体。
+- **文件**：`Assets/Resources/Fonts/NotoSansSC-VF.ttf`
+- **字体**：Noto Sans SC（可变字体，TrueType）
+- **授权**：SIL Open Font License 1.1 —— **明确允许随软件打包再分发**
+- **版权**：Copyright 2014-2021 Adobe，Reserved Font Name 'Source'；
+  Noto 是 Google Inc. 的商标
+- **来源**：https://fonts.google.com/noto/specimen/Noto+Sans+SC
+- **许可全文**：同目录 `OFL.txt`
+
+### 为什么用它而不用系统黑体
+
+早期版本打包的是 Windows 自带的 `SimHei.ttf`。这有两个问题：
+
+1. **授权**：Windows 自带字体的许可不允许随工程再分发，放进公开仓库有风险；
+2. **复现性**：依赖开发机系统字体，其他机器上显示效果无法保证。
+
+Noto Sans SC 是 OFL 授权、可自由再分发，且是**真 TrueType**（sfnt 头 `0x00010000`），
+TextMeshPro 对其支持最稳。
+
+### 字形可用性是被断言验证过的
+
+换字体后，自检会向 Unity 字体系统逐个索取界面实际用到的汉字
+（`TextRenderer.FindMissingGlyphs`，覆盖中文与 `★×·—` 等符号），
+拿到才算通过。**只验证"字体加载成功"是不够的** ——
+回退字体或解析失败的字体同样能加载，但中文会全变方块。
+这个断言在换字体时确实拦下了一次误判（见 README 第 6 节）。
+
+代码中另有三级回退链：工程字体 → 系统字体 → Unity 内建字体，
+因此即使删除字体文件，游戏依然可以启动。

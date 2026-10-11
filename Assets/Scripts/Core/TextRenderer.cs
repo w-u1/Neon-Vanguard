@@ -24,10 +24,18 @@ namespace NeonVanguard
         static Material _worldUnlitMat;
         static bool _probed;
 
+        /// <summary>
+        /// 系统字体名回退候选。仅在工程内字体不可用时使用。
+        /// 顺序：开源字体优先，其次是 Windows 自带的中文字体。
+        /// </summary>
         static readonly string[] CjkFontNames =
         {
-            "SimHei", "Microsoft YaHei", "SimSun", "Noto Sans CJK SC", "Arial Unicode MS"
+            "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC",
+            "SimHei", "Microsoft YaHei", "SimSun"
         };
+
+        /// <summary>工程内自带的中文字体（Resources 路径）。</summary>
+        const string ProjectFontPath = "Fonts/NotoSansSC-VF";
 
         /// <summary>探测运行环境，决定走 TMP 还是 Legacy 分支。</summary>
         public static void Probe()
@@ -39,7 +47,7 @@ namespace NeonVanguard
             //    之所以把字体放进 Resources，是因为 TMP 的 "按路径创建" 重载只在编辑器程序集里，
             //    运行时程序集必须拿到一个 Font 对象才行。
             Font source = LoadProjectFont();
-            string sourceDesc = source != null ? "Resources/SimHei" : null;
+            string sourceDesc = source != null ? ("Resources/" + ProjectFontPath) : null;
 
             if (source == null)
             {
@@ -72,21 +80,66 @@ namespace NeonVanguard
                 if (all != null && all.Length > 0) _legacyFont = all[0];
             }
 
-            Debug.Log(string.Format("[TextRenderer] TMP={0}, 字体来源={1}",
-                UseTmp, sourceDesc ?? "(无)"));
+            FontSourceDesc = sourceDesc ?? "(无)";
+            Debug.Log(string.Format("[TextRenderer] TMP={0}, 字体来源={1}", UseTmp, FontSourceDesc));
         }
 
-        /// <summary>工程自带字体（Assets/Resources/Fonts/SimHei.ttf）。</summary>
+        /// <summary>
+        /// 校验中文能否真正渲染出来（返回缺字列表，空数组表示全部可用）。
+        ///
+        /// 实现说明：这里刻意**不用** TMP 的 HasCharacters 做判定。
+        /// TMP 3.0.6 里 `HasCharacters(string, out List&lt;char&gt;)` 这个重载
+        /// **没有 tryAddCharacter 参数**，对动态字体它只查"已缓存字形"，
+        /// 会把尚未按需生成的汉字全部误报为缺字（这个坑实际踩到过，一度以为换字体失败）。
+        ///
+        /// 改用 Unity 字体系统自己的 RequestCharactersInTexture：
+        /// 它就是为了"确认这些字能不能画出来"而存在的，对动态字体语义正确。
+        /// </summary>
+        public static char[] FindMissingGlyphs(string probe)
+        {
+            var font = _legacyFont;
+            if (font == null) return probe.ToCharArray();
+
+            var missing = new System.Collections.Generic.List<char>();
+            for (int i = 0; i < probe.Length; i++)
+            {
+                bool ok;
+                try
+                {
+                    // RequestCharactersInTexture 返回 void：先请求生成字形，
+                    // 再用 HasCharacter 判断是否真的拿到了（dynamic=true 允许运行时生成）
+                    font.RequestCharactersInTexture(probe[i].ToString(), 24, FontStyle.Normal);
+                    ok = font.HasCharacter(probe[i]);
+                }
+                catch
+                {
+                    ok = false;
+                }
+                if (!ok) missing.Add(probe[i]);
+            }
+            return missing.ToArray();
+        }
+
+        /// <summary>
+        /// 工程自带字体（Assets/Resources/Fonts/NotoSansSC-VF.ttf）。
+        ///
+        /// 选 Noto Sans SC 而不是系统黑体：它是 SIL OFL 1.1 授权，
+        /// **明确允许打包再分发**，而 Windows 自带字体不允许随工程分发。
+        /// 另外它是真 TrueType（sfnt 头 0x00010000），TMP 对其支持最稳。
+        /// </summary>
         static Font LoadProjectFont()
         {
             try
             {
-                var f = Resources.Load<Font>("Fonts/SimHei");
+                var f = Resources.Load<Font>(ProjectFontPath);
                 if (f != null) return f;
             }
             catch { }
             return null;
         }
+
+        /// <summary>供自检报告当前使用的字体来源。</summary>
+        public static string FontSourceDesc { get; private set; }
 
         /// <summary>系统字体，按字体名尝试。</summary>
         static Font LoadOsFont()

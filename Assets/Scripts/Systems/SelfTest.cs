@@ -255,14 +255,15 @@ namespace NeonVanguard
             bool upgradeOk = _upgradesChosen >= 1;
             bool inputOk = InputAxesOk();
             bool eventOk = EventSystemOk();
+            bool fontOk = FontOk();
 
             Debug.Log(string.Format(
-                "[SelfTest] 判定: {0}\n  波次>=3: {1} (实际 {2})\n  事件击杀>=30: {3} (实际 {4})\n  等级>=2: {5} (实际 {6})\n  已选升级>=1: {7} (实际 {8})\n  UI 输入轴齐全: {9}\n  EventSystem 可用: {10}",
-                (waveOk && killOk && levelOk && upgradeOk && inputOk && eventOk) ? "PASS(待界面审计)" : "FAIL",
+                "[SelfTest] 判定: {0}\n  波次>=3: {1} (实际 {2})\n  事件击杀>=30: {3} (实际 {4})\n  等级>=2: {5} (实际 {6})\n  已选升级>=1: {7} (实际 {8})\n  UI 输入轴齐全: {9}\n  EventSystem 可用: {10}\n  中文字形可用: {11}",
+                (waveOk && killOk && levelOk && upgradeOk && inputOk && eventOk && fontOk) ? "PASS(待界面审计)" : "FAIL",
                 waveOk, _maxWave, killOk, _killsSeen, levelOk, RunState.Level, upgradeOk, _upgradesChosen,
-                inputOk, eventOk));
+                inputOk, eventOk, fontOk));
 
-            bool screenMainOk = waveOk && killOk && levelOk && upgradeOk && inputOk && eventOk;
+            bool screenMainOk = waveOk && killOk && levelOk && upgradeOk && inputOk && eventOk && fontOk;
 
             // 界面审计是协程（需要跨帧，否则截图抓不到正确的画面），
             // 所以把最终判定与退出放进协程的收尾里。
@@ -412,6 +413,31 @@ namespace NeonVanguard
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// 检查中文能否真正渲染。
+        ///
+        /// 只验证「字体对象加载成功」是不够的：变量字体（VF）或纯英文回退字体
+        /// 也能加载成功，但中文会全变方块。这里直接向 TMP 字体资产索取中文字形，
+        /// 拿得到才算通过 —— 换字体后必须跑这一条兜底。
+        /// </summary>
+        public static bool FontOk()
+        {
+            // 覆盖界面里实际用到的几类字符：中文、全角标点、项目符号、乘号
+            const string probe = "任务失败经验值冲刺就绪生存开始首领击杀波次";
+            char[] missing = TextRenderer.FindMissingGlyphs(probe);
+
+            if (missing.Length == 0)
+            {
+                Debug.Log("[SelfTest] 中文字形校验通过  字体来源=" + TextRenderer.FontSourceDesc
+                    + "  校验串=" + probe);
+                return true;
+            }
+
+            Debug.LogError("[SelfTest] 中文字形校验失败  字体来源=" + TextRenderer.FontSourceDesc
+                + "  缺字：" + new string(missing));
+            return false;
         }
 
         /// <summary>
