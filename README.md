@@ -149,7 +149,7 @@ Assets/
 
 ---
 
-## 5. 值得在面试里讲的技术点
+## 5. 技术点
 
 1. **场景零手工装配**：用 `[RuntimeInitializeOnLoadMethod]` + 代码构建整个舞台。
    没有预制体、没有 GUID 引用断裂、没有二进制资源，code review 与 diff 都干净。
