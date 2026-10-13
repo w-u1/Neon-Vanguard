@@ -10,30 +10,8 @@
 
 ## 1. 快速开始
 
-### 方式 A：直接玩
+### 直接玩
 双击 **`Build/Windows/NeonVanguard.exe`**。
-
-### 方式 B：用 Unity 编辑器打开
-1. Unity Hub → Add → 选择 `NeonVanguard` 文件夹（本工程基于 **Unity 2022.3.62f3c1**，2022.3.x 均可）
-2. 打开后直接按 **Play**
-   > 场景文件 `Assets/Scenes/Main.unity` 是**空的**，这是刻意设计：
-   > 整个舞台（相机、光照、场地、角色、UI）由 `Bootstrap.cs` 在运行时构建。
-3. 想自己出包：菜单 `Neon Vanguard → 构建 Windows 版本`
-
-### 方式 C：命令行无头构建
-```bash
-Unity.exe -quit -batchmode -nographics -projectPath <工程路径> \
-          -executeMethod NeonVanguard.EditorTools.Builder.BuildWindows
-```
-
-### 方式 D：无头自动化自检（推荐给面试官）
-```bash
-Build/Windows/NeonVanguard.exe -batchmode -nographics -logFile out.log -nvt-selftest 180
-```
-游戏会**自己玩 180 秒**（自动瞄准、走位、冲刺、自动选升级），结束时输出统计报告并用退出码表示结果
-（`0` = PASS）。这是本工程的一个亮点：**玩法逻辑有自动化验证，不依赖人工试玩**。
-
----
 
 ## 2. 操作方式
 
